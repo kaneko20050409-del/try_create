@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    container_name: day4-api-compose
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - db  # DBが立ち上がってからアプリを起動する設定
+
+  db:
+    image: postgres:16
+    container_name: day4-db-compose
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # データを永続化する
+
+volumes:
+  postgres_data:
