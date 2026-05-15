@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Pythonアプリ（開発環境）
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: fastapi-app-dev
+    volumes:
+      - .:/workspaces/develop:cached
+    environment:
+      - ENV=development
+      # ここでDB接続情報を環境変数として持っておくと便利です
+      - DATABASE_URL=postgresql://user:password@db:5432/my_database
+    depends_on:
+      - db
+    # コンテナを落とさないようにするための設定
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  # データベース（PostgreSQL）
+  db:
+    image: postgres:15-alpine  # alphineのタイポを修正
+    container_name: fastapi-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: my_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

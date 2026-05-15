@@ -1,0 +1,28 @@
+{
+  "name": "FastAPI-and-PostgreSQL",
+  
+  // docker-compose.ymlの場所を指定（.devcontainerから見た相対パス）
+  "dockerComposeFile": "../docker-compose.yml",
+  
+  // VS Codeを立ち上げるサービス名
+  "service": "app",
+  
+  // コンテナ内の作業ディレクトリ
+  "workspaceFolder": "/workspaces/develop",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylance",
+        "ckotzbauer.vscode-pgadmin" // (おまけ) VS CodeからDBが見れる拡張機能
+      ]
+    }
+  },
+
+  // コンテナの外（自分のPC）からアクセスしたいポート
+  "forwardPorts": [8000, 5432],
+
+  "postCreateCommand": "pip3 install -r requirements.txt",
+  "remoteUser": "root"
+}
